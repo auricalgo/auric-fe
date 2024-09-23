@@ -10,7 +10,6 @@ def nandan_live2(stock_name):
 
     df = fetch_data_from_tru_data(stock_name ,'1 Y')
     # df.drop(df.tail(1).index,inplace=True)
-    # print(df)
     df1 = fetch_data_from_tru_data_nandan(stock_name,df['date'].iloc[0],365,'EOD')
     df_final = pd.concat([df1,df],axis=0).reset_index(drop=True)
 
@@ -125,7 +124,9 @@ def final_run():
         # end = time.time() - start_time
     # df9.to_csv('old_live.csv')
     if df9.shape[0]:
-        df9['date_of_run'] = datetime.datetime.today().strftime('%Y-%m-%d')
-        df9['time_of_run'] = datetime.datetime.today().strftime('%H:%M:%S')
-    df9.to_csv('live.csv', mode='a', header=False, index=False)
+        df9['date_of_run'] = datetime.now().strftime('%Y-%m-%d')
+        df9['time_of_run'] = datetime.now().strftime('%H:%M:%S')
+        print(df9)
+        print(df9.columns)
+        df9.to_csv('live.csv', mode='a', header=False, index=False)
     return df9
