@@ -20,7 +20,7 @@ if "df" not in st.session_state:
     np.random.seed(42)
     if os.path.exists('live.csv'):
         df = pd.read_csv('live.csv')
-        df = df.drop(['Unnamed: 0'],axis=1)
+        # df = df.drop(['Unnamed: 0'],axis=1)
         st.session_state.df = df
     else:
         st.session_state.df = pd.DataFrame()
@@ -48,7 +48,12 @@ if st.session_state.df.shape[0]:
     yesterday = today - pd.Timedelta(days=1)
     today = pd.to_datetime(today).date()
     yesterday = pd.to_datetime(yesterday).date()
-    if (max_date == yesterday and max_time >= time_threshold_pm) or (max_date == pd.to_datetime('today') and max_time <= time_threshold_am) :
+    if (max_date == yesterday and max_time >= time_threshold_pm) and (max_date == pd.to_datetime('today') and max_time <= time_threshold_am) :
+        st.write("Run Completed for Today - ",max_date)
+        st.session_state.running = True
+        filtered_df = st.session_state.df[st.session_state.df['date_of_run'] == max_date]
+        st.dataframe(filtered_df)
+    elif (max_date == pd.to_datetime('today') and max_time <= time_threshold_pm) :
         st.write("Run Completed for Today - ",max_date)
         st.session_state.running = True
         filtered_df = st.session_state.df[st.session_state.df['date_of_run'] == max_date]

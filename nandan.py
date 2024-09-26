@@ -124,7 +124,7 @@ def final_run():
     if df9.shape[0]:
         df9['date_of_run'] = datetime.now().strftime('%Y-%m-%d')
         df9['time_of_run'] = datetime.now().strftime('%H:%M:%S')
-        df9.to_csv('test.csv')
+        # df9.to_csv('test.csv')
         # df9 = pd.read_csv('test.csv')
         if os.path.exists('live.csv'):
             columns_to_compare = ['entry_date','Buy/Sell','Company']
