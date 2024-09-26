@@ -1,6 +1,6 @@
 from utils import *
 # import streamlit as st
-
+import os
 
 
 
@@ -114,19 +114,44 @@ def get_support_and_resis(df,date_for_s_r,x,stock_name):
 
 def final_run():
     df9 = pd.DataFrame()
+    df1_filtered = pd.DataFrame()
     for i in NIFTY100:
-        # start_time = time.time()
         df = pd.DataFrame()
         df = nandan_live2(i)
         if df.shape[0]:
             df['Company'] = i
             df9 = pd.concat([df9,df]).reset_index(drop=True)
-        # end = time.time() - start_time
-    # df9.to_csv('old_live.csv')
     if df9.shape[0]:
         df9['date_of_run'] = datetime.now().strftime('%Y-%m-%d')
         df9['time_of_run'] = datetime.now().strftime('%H:%M:%S')
-        print(df9)
-        print(df9.columns)
-        df9.to_csv('live.csv', mode='a', header=False, index=False)
-    return df9
+        df9.to_csv('test.csv')
+        # df9 = pd.read_csv('test.csv')
+        if os.path.exists('live.csv'):
+            columns_to_compare = ['entry_date','Buy/Sell','Company']
+            df10 = pd.read_csv('live.csv')
+            df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], format='%Y-%m-%d')
+            # df10 = df10.drop(['Unnamed: 0'],axis=1)
+            mask = df10[columns_to_compare].apply(tuple, 1).isin(df9[columns_to_compare].apply(tuple, 1))
+            df1_filtered = df9[~mask]
+            # df1_filtered = df1_filtered.drop(['Unnamed: 0'],axis=1)
+            if df1_filtered.shape[0]:
+                df10 = pd.concat([df10,df1_filtered],axis=0,ignore_index=True)
+                df10 = df10.drop(['Unnamed: 0'],axis=1)
+                df10.to_csv('live.csv',index=False)
+        else:
+            df9.to_csv('live.csv')
+        
+        df11 = pd.DataFrame()
+        df11['date_of_run'] = [datetime.now().strftime('%Y-%m-%d')]
+        df11['time_of_run'] = [datetime.now().strftime('%H:%M:%S')]
+        
+        if os.path.exists('timesheet.csv'):
+            df12 = pd.read_csv('timesheet.csv')
+            df12 = pd.concat([df12,df11],axis=0,ignore_index=True)
+            # df10 = df10.drop(['Unnamed: 0'],axis=1)
+            df12.to_csv('timesheet.csv', index=False)
+        else:
+            df11.to_csv('timesheet.csv')
+
+
+    return df1_filtered
