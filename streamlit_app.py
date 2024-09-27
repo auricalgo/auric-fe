@@ -48,7 +48,7 @@ if st.session_state.df.shape[0]:
     yesterday = today - pd.Timedelta(days=1)
     today = pd.to_datetime(today).date()
     yesterday = pd.to_datetime(yesterday).date()
-    if (max_date == yesterday and max_time >= time_threshold_pm) and (max_date == pd.to_datetime('today') and max_time <= time_threshold_am) :
+    if (max_date == yesterday and max_time >= time_threshold_pm) or (max_date == pd.to_datetime('today') and max_time <= time_threshold_am) :
         st.write("Run Completed for Today - ",max_date)
         st.session_state.running = True
         filtered_df = st.session_state.df[st.session_state.df['date_of_run'] == max_date]
