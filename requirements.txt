@@ -1,4 +1,3 @@
 streamlit
-truedata_ws
+truedata_ws==5.0.11
 stockstats
-pandas
