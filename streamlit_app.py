@@ -33,8 +33,10 @@ else:
 submitted = False
 st.header("Today's Run")
 if st.session_state.df.shape[0]:
-    st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], format='%Y-%m-%d').dt.date
+    st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], format='%d/%m/%y').dt.date
+    # print(st.session_state.df['date_of_run'])
     df12 = pd.read_csv('timesheet.csv')
+    df12 = df12.drop(['Unnamed: 0'],axis=1)
     df12['date_of_run'] = pd.to_datetime(df12['date_of_run'], format='%Y-%m-%d').dt.date
     df12['time_of_run'] = pd.to_datetime(df12['time_of_run'], format='%H:%M:%S').dt.time
 
@@ -42,7 +44,7 @@ if st.session_state.df.shape[0]:
     max_time = df12[df12['date_of_run'] == max_date]['time_of_run'].max()
 
     time_threshold_pm = pd.to_datetime('15:30:00', format='%H:%M:%S').time()
-    time_threshold_am = pd.to_datetime('09:30:00', format='%H:%M:%S').time()
+    time_threshold_am = pd.to_datetime('09:15:00', format='%H:%M:%S').time()
 
     today = datetime.datetime.now()
     yesterday = today - pd.Timedelta(days=1)
