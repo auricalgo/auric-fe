@@ -129,14 +129,16 @@ def final_run():
         if os.path.exists('live.csv'):
             columns_to_compare = ['entry_date','Buy/Sell','Company']
             df10 = pd.read_csv('live.csv')
-            df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], format='%Y-%m-%d')
+            
+            df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], infer_datetime_format=True, errors='coerce')
+            df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], format='%Y-%m-%d').dt.date
             # df10 = df10.drop(['Unnamed: 0'],axis=1)
             mask = df10[columns_to_compare].apply(tuple, 1).isin(df9[columns_to_compare].apply(tuple, 1))
             df1_filtered = df9[~mask]
             # df1_filtered = df1_filtered.drop(['Unnamed: 0'],axis=1)
             if df1_filtered.shape[0]:
                 df10 = pd.concat([df10,df1_filtered],axis=0,ignore_index=True)
-                df10 = df10.drop(['Unnamed: 0'],axis=1)
+                df10 = df10.drop(['Unnamed: 0'],axis=1,errors='ignore')
                 df10.to_csv('live.csv',index=False)
         else:
             df9.to_csv('live.csv')

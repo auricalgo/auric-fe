@@ -33,10 +33,17 @@ else:
 submitted = False
 st.header("Today's Run")
 if st.session_state.df.shape[0]:
-    st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], format='%d/%m/%y').dt.date
+    st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], infer_datetime_format=True, errors='coerce')
+    st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], format='%Y-%m-%d').dt.date
+
+    # st.session_state.df['date_of_run'] = st.session_state.df['date_of_run'].apply(lambda x: x.strftime('%Y-%m-%d'))
+    # st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], infer_datetime_format=True,errors='coerce').dt.date
     # print(st.session_state.df['date_of_run'])
+
     df12 = pd.read_csv('timesheet.csv')
-    df12 = df12.drop(['Unnamed: 0'],axis=1)
+    df12 = df12.drop(['Unnamed: 0'],axis=1,errors='ignore')
+
+    df12['date_of_run'] = pd.to_datetime(df12['date_of_run'], infer_datetime_format=True, errors='coerce')
     df12['date_of_run'] = pd.to_datetime(df12['date_of_run'], format='%Y-%m-%d').dt.date
     df12['time_of_run'] = pd.to_datetime(df12['time_of_run'], format='%H:%M:%S').dt.time
 
