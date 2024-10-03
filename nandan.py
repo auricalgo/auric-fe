@@ -12,8 +12,9 @@ def nandan_live2(stock_name):
     # df.drop(df.tail(1).index,inplace=True)
     df1 = fetch_data_from_tru_data_nandan(stock_name,df['date'].iloc[0],365,'EOD')
     df_final = pd.concat([df1,df],axis=0).reset_index(drop=True)
-
+    print(df)
     new = calculate_stock_indicators(df.copy(),'atr_14','ATR_14')
+    print(new)
     new = new.drop(['atr_14'],axis=1)
     new2 = calculate_stock_indicators(new.copy(),'close_50_sma','SMA')
 
@@ -132,7 +133,13 @@ def final_run():
             
             df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], infer_datetime_format=True, errors='coerce')
             df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], format='%Y-%m-%d').dt.date
-            # df10 = df10.drop(['Unnamed: 0'],axis=1)
+
+            df10['entry_date'] = pd.to_datetime(df10['entry_date'], infer_datetime_format=True, errors='coerce')
+            df10['entry_date'] = pd.to_datetime(df10['entry_date'], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
+
+            df9['entry_date'] = pd.to_datetime(df10['entry_date'], infer_datetime_format=True, errors='coerce')
+            df9['entry_date'] = pd.to_datetime(df10['entry_date'], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
+
             mask = df10[columns_to_compare].apply(tuple, 1).isin(df9[columns_to_compare].apply(tuple, 1))
             df1_filtered = df9[~mask]
             # df1_filtered = df1_filtered.drop(['Unnamed: 0'],axis=1)
