@@ -22,7 +22,7 @@ def nandan_live2(stock_name):
    
     lst = []
     date_entry = "NA"
-    exit_date = date(2010,2,20)
+    exit_date = datetime(2010,2,20,0,0,0)
     for i in range(df_new.shape[0]-10,df_new.shape[0]):
         start_date_identify = df_new['date'].iloc[i]
         if start_date_identify  >= exit_date:
