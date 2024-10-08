@@ -108,6 +108,7 @@ def get_support_and_resis(df,date_for_s_r,x,stock_name):
     else:
         df3 = pd.DataFrame([x]).reset_index(drop=True)
         df1 = fetch_data_from_tru_data_nandan(stock_name,df3['date'].iloc[0],365,'EOD')
+        time.sleep(0.1)
     supp,resis = s_and_r(df1)
 
     return supp,resis
@@ -137,8 +138,8 @@ def final_run():
             df10['entry_date'] = pd.to_datetime(df10['entry_date'], infer_datetime_format=True, errors='coerce')
             df10['entry_date'] = pd.to_datetime(df10['entry_date'], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
 
-            df9['entry_date'] = pd.to_datetime(df10['entry_date'], infer_datetime_format=True, errors='coerce')
-            df9['entry_date'] = pd.to_datetime(df10['entry_date'], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
+            df9['entry_date'] = pd.to_datetime(df9['entry_date'], infer_datetime_format=True, errors='coerce')
+            df9['entry_date'] = pd.to_datetime(df9['entry_date'], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
 
             mask = df9[columns_to_compare].apply(tuple, 1).isin(df10[columns_to_compare].apply(tuple, 1))
             df1_filtered = df9[~mask]

@@ -4,7 +4,7 @@ import numpy as np
 from truedata_ws.websocket.TD import TD
 from datetime import date,datetime,time,timedelta
 from dateutil.relativedelta import relativedelta,TH,FR,WE
-
+import time
 
 td_obj = TD('tdws119', 'mridul@119',live_port=None)
 
