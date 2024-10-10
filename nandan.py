@@ -15,7 +15,7 @@ def nandan_live2(stock_name):
     # print(df)
     new = calculate_stock_indicators(df.copy(),'atr_14','ATR_14')
     # print(new)
-    # new = new.drop(['atr_14'],axis=1)
+    new = new.drop(['atr_14'],axis=1)
     new2 = calculate_stock_indicators(new.copy(),'close_50_sma','SMA')
 
     df_new  = new2[['date','open','close','high','low','atr_14','SMA']]
