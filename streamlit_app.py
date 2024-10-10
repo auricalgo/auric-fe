@@ -34,7 +34,7 @@ submitted = False
 st.header("Today's Run")
 if st.session_state.df.shape[0]:
     st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], infer_datetime_format=True, errors='coerce')
-    st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], format='%Y-%m-%d').dt.date
+    st.session_state.df['date_of_run'] = pd.to_datetime(st.session_state.df['date_of_run'], format='%d/%m/%y').dt.date
 
     df12 = pd.read_csv('timesheet.csv')
     df12 = df12.drop(['Unnamed: 0'],axis=1,errors='ignore')
@@ -54,15 +54,16 @@ if st.session_state.df.shape[0]:
     max_time = df12[df12['date_of_run'] == max_date]['time_of_run'].max()
     max_datetime = df12['exact_time'].max()
 
-    print(df12['exact_time'])
-    print(today_915_am)
-
-    if (max_datetime >= yesterday_330_pm and  max_datetime <= today_915_am) and (today <= today_330_pm):
-            print("Hi")
-            st.write("Run Completed for Today - ",max_date)
-            st.session_state.running = True
-            filtered_df = st.session_state.df[st.session_state.df['date_of_run'] == max_date]
-            st.dataframe(filtered_df)
+    if yesterday_330_pm <= today <= today_330_pm and max_datetime < today_330_pm:
+        st.write("Run Completed for Today - ",max_date)
+        st.session_state.running = True
+        filtered_df = st.session_state.df[st.session_state.df['date_of_run'] == max_date]
+        st.dataframe(filtered_df)
+    elif today > today_330_pm and max_datetime > today_330_pm:
+        st.write("Run Completed for Today - ",max_date)
+        st.session_state.running = True
+        filtered_df = st.session_state.df[st.session_state.df['date_of_run'] == max_date]
+        st.dataframe(filtered_df)
     else:
         submitted  = st.button('Run',disabled=st.session_state.running, key='run_button')
 else:

@@ -15,7 +15,7 @@ def nandan_live2(stock_name):
     # print(df)
     new = calculate_stock_indicators(df.copy(),'atr_14','ATR_14')
     # print(new)
-    new = new.drop(['atr_14'],axis=1)
+    # new = new.drop(['atr_14'],axis=1)
     new2 = calculate_stock_indicators(new.copy(),'close_50_sma','SMA')
 
     df_new  = new2[['date','open','close','high','low','atr_14','SMA']]
@@ -124,7 +124,7 @@ def final_run():
             df['Company'] = i
             df9 = pd.concat([df9,df]).reset_index(drop=True)
     if df9.shape[0]:
-        df9['date_of_run'] = datetime.now().strftime('%Y-%m-%d')
+        df9['date_of_run'] = datetime.now().strftime('%d/%m/%y')
         df9['time_of_run'] = datetime.now().strftime('%H:%M:%S')
         # df9.to_csv('test.csv')
         # df9 = pd.read_csv('test.csv')
@@ -133,13 +133,13 @@ def final_run():
             df10 = pd.read_csv('live.csv')
             
             df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], infer_datetime_format=True, errors='coerce')
-            df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], format='%Y-%m-%d').dt.date
+            df10['date_of_run'] = pd.to_datetime(df10['date_of_run'], format='%d/%m/%y').dt.date
 
             df10['entry_date'] = pd.to_datetime(df10['entry_date'], infer_datetime_format=True, errors='coerce')
-            df10['entry_date'] = pd.to_datetime(df10['entry_date'], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
+            df10['entry_date'] = pd.to_datetime(df10['entry_date'], format='%d/%m/%y').dt.strftime('%d/%m/%y')
 
             df9['entry_date'] = pd.to_datetime(df9['entry_date'], infer_datetime_format=True, errors='coerce')
-            df9['entry_date'] = pd.to_datetime(df9['entry_date'], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
+            df9['entry_date'] = pd.to_datetime(df9['entry_date'], format='%d/%m/%y').dt.strftime('%d/%m/%y')
 
             mask = df9[columns_to_compare].apply(tuple, 1).isin(df10[columns_to_compare].apply(tuple, 1))
             df1_filtered = df9[~mask]
@@ -152,7 +152,7 @@ def final_run():
             df9.to_csv('live.csv')
     
     df11 = pd.DataFrame()
-    df11['date_of_run'] = [datetime.now().strftime('%Y-%m-%d')]
+    df11['date_of_run'] = [datetime.now().strftime('%d/%m/%y')]
     df11['time_of_run'] = [datetime.now().strftime('%H:%M:%S')]
     
     if os.path.exists('timesheet.csv'):
