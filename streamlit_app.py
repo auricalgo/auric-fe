@@ -50,7 +50,7 @@ if st.session_state.df.shape[0]:
     today_330_pm = today.replace(hour=15, minute=30, second=0, microsecond=0)
 
 
-    max_date = df12['date_of_run'].max()
+    max_date = df12['date_of_run'].dt.date.max()
     max_time = df12[df12['date_of_run'] == max_date]['time_of_run'].max()
     max_datetime = df12['exact_time'].max()
 
