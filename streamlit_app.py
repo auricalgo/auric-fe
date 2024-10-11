@@ -45,9 +45,9 @@ if st.session_state.df.shape[0]:
 
     today = datetime.datetime.now()
     yesterday = today - pd.Timedelta(days=1)
-    yesterday_330_pm = yesterday.replace(hour=15, minute=30, second=0, microsecond=0)
-    today_915_am = today.replace(hour=9, minute=15, second=0, microsecond=0)
-    today_330_pm = today.replace(hour=15, minute=30, second=0, microsecond=0)
+    yesterday_330_pm = yesterday.replace(hour=10, minute=00, second=0, microsecond=0)
+    today_915_am = today.replace(hour=3, minute=45, second=0, microsecond=0)
+    today_330_pm = today.replace(hour=10, minute=0, second=0, microsecond=0)
 
 
     max_date = df12['date_of_run'].dt.date.max()
