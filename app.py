@@ -3,6 +3,11 @@ from nandan import final_run
 
 app = Flask(__name__)
 
+@app.route('/api/health', methods=['GET'])
+def run_health():
+
+    return 'True'
+
 @app.route('/api/data', methods=['GET'])
 def run_api():
 
