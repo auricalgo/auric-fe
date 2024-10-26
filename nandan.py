@@ -9,13 +9,14 @@ def nandan_live2(stock_name):
     final_df2 = pd.DataFrame()
 
     df = fetch_data_from_tru_data(stock_name ,'1 Y')
+    time.sleep(0.1)
     # df.drop(df.tail(1).index,inplace=True)
     df1 = fetch_data_from_tru_data_nandan(stock_name,df['date'].iloc[0],365,'EOD')
     df_final = pd.concat([df1,df],axis=0).reset_index(drop=True)
     # print(df)
     new = calculate_stock_indicators(df.copy(),'atr_14','ATR_14')
     # print(new)
-    # new = new.drop(['atr_14'],axis=1)
+    new = new.drop(['atr_14'],axis=1)
     new2 = calculate_stock_indicators(new.copy(),'close_50_sma','SMA')
 
     df_new  = new2[['date','open','close','high','low','atr_14','SMA']]
