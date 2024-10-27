@@ -1,0 +1,1 @@
+45 15 * * 1-5 /usr/bin/python3 /home/ubuntu/auric-fe/run.py
