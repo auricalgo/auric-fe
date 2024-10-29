@@ -5,8 +5,23 @@ from truedata_ws.websocket.TD import TD
 from datetime import date,datetime,time,timedelta
 from dateutil.relativedelta import relativedelta,TH,FR,WE
 import time
+import psycopg2
+from psycopg2 import Error
+import statistics as stats
+from configparser import *
+import mysql.connector
+import requests
+from sqlalchemy import create_engine
+from copy import deepcopy
+import os
 
 td_obj = TD('tdws119', 'mridul@119',live_port=None)
+
+
+config = ConfigParser()
+config.read('config.ini')
+
+cred = {'host':config.get('db','host'),'port':config.get('db','port'),'user':config.get('db','user'),'password':config.get('db','password'),'database':config.get('db','database')}
 
 def fetch_data_from_tru_data(symbol,time='5 Y'):
     ''' Fetching stock data from true data and return a Dataframe'''
@@ -73,106 +88,26 @@ def s_and_r(df):
 
     return support,resistance
 
-NIFTY100 = [
-'ABB',
-'ADANIENSOL',
-'ADANIENT',
-'ADANIGREEN',
-'ADANIPORTS',
-'ADANIPOWER',
-'ATGL',
-'AMBUJACEM',
-'APOLLOHOSP',
-'ASIANPAINT',
-'DMART',
-'AXISBANK',
-'BAJAJ-AUTO',
-'BAJFINANCE',
-'BAJAJFINSV',
-'BAJAJHLDNG',
-'BANKBARODA',
-'BERGEPAINT',
-'BEL',
-'BPCL',
-'BHARTIARTL',
-'BOSCHLTD',
-'BRITANNIA',
-'CANBK',
-'CHOLAFIN',
-'CIPLA',
-'COALINDIA',
-'COLPAL',
-'DLF',
-'DABUR',
-'DIVISLAB',
-'DRREDDY',
-'EICHERMOT',
-'GAIL',
-'GODREJCP',
-'GRASIM',
-'HCLTECH',
-'HDFCBANK',
-'HDFCLIFE',
-'HAVELLS',
-'HEROMOTOCO',
-'HINDALCO',
-'HAL',
-'HINDUNILVR',
-'ICICIBANK',
-'ICICIGI',
-'ICICIPRULI',
-'ITC',
-'IOC',
-'IRCTC',
-'IRFC',
-'INDUSINDBK',
-'NAUKRI',
-'INFY',
-'INDIGO',
-'JSWSTEEL',
-'JINDALSTEL',
-'JIOFIN',
-'KOTAKBANK',
-'LTIM',
-'LT',
-'LICI',
-'M&M',
-'MARICO',
-'MARUTI',
-'NTPC',
-'NESTLEIND',
-'ONGC',
-'PIDILITIND',
-'PFC',
-'POWERGRID',
-'PNB',
-'RECLTD',
-'RELIANCE',
-'SBICARD',
-'SBILIFE',
-'SRF',
-'MOTHERSON',
-'SHREECEM',
-'SHRIRAMFIN',
-'SIEMENS',
-'SBIN',
-'SUNPHARMA',
-'TVSMOTOR',
-'TCS',
-'TATACONSUM',
-'TATAMTRDVR',
-'TATAMOTORS',
-'TATAPOWER',
-'TATASTEEL',
-'TECHM',
-'TITAN',
-'TORNTPHARM',
-'TRENT',
-'ULTRACEMCO',
-'UNITDSPR',
-'VBL',
-'VEDL',
-'WIPRO',
-'ZOMATO',
-'ZYDUSLIFE'
-]
+
+def fetch_and_rename(query):
+
+    cnx = mysql.connector.connect(**cred)
+    if(cnx):
+        df = pd.read_sql(query,con=cnx)
+        cnx.close()
+
+    return df
+
+
+def insert_dataframe_to_db(dataframe,table_name,exists='append'):
+    ''' Insert DataFrame to DB'''
+    engine = create_engine("mysql+mysqlconnector://" + config.get('db','user') + ":" + config.get('db','password') + "@" + config.get('db','host') + "/" + config.get('db','database'))
+    conn = engine.connect()
+    try:
+        dataframe.to_sql(table_name,engine,if_exists=exists,index=False)
+        error = True
+    except Exception as e:
+        error = False
+        print(e)
+
+    return error
