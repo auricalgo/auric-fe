@@ -30,6 +30,13 @@ def get_td_data_api():
     return df.to_json(orient='records')
 
 
+@app.route('/api/max_time', methods=['GET'])
+def get_max_timesheet_api():
+
+    df= fetch_and_rename("""SELECT * FROM masteradmin.timesheet
+                         WHERE id = (SELECT MAX(id) FROM masteradmin.timesheet); """)
+
+    return df.to_json(orient='records')
 
 
 

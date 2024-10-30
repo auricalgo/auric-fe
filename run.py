@@ -7,5 +7,6 @@ def callApi():
     url = base_url + '/run'
     response = requests.request("GET", url)
     print(response)
+    print(response.text)
 
 callApi()
