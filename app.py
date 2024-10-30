@@ -26,6 +26,9 @@ def get_td_data_api():
 
     df= fetch_and_rename("""SELECT * FROM masteradmin.live
                          WHERE date_of_run = (SELECT MAX(date_of_run) FROM masteradmin.live);""")
+    
+    df = df.drop(['date'],axis=1,errors='ignore')
+
 
     return df.to_json(orient='records')
 
