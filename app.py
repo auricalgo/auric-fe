@@ -62,7 +62,7 @@ def run_api():
 
 
 @app.route('/api/stock', methods=['GET'])
-def run_api():
+def stock_api():
 
     param1 = request.args.get('symbol')
 
