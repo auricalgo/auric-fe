@@ -61,5 +61,16 @@ def run_api():
     return 'True'
 
 
+@app.route('/api/stock', methods=['GET'])
+def run_api():
+
+    param1 = request.args.get('symbol')
+
+    df11 = final_run_single_stock(param1)
+
+
+    return df11.to_json(orient='records')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5020 ,debug=False)
