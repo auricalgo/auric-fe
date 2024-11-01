@@ -53,9 +53,9 @@ def run_api():
     df11['date_of_run'] = [datetime.now().strftime('%Y-%m-%d')]
     df11['time_of_run'] = [datetime.now().strftime('%H:%M:%S')]
     
-    df12 = fetch_and_rename("select * from timesheet")
-    df12 = pd.concat([df12,df11],axis=0,ignore_index=True)
-    insert_dataframe_to_db(df12,'timesheet')
+    # df12 = fetch_and_rename("select * from timesheet")
+    # df12 = pd.concat([df12,df11],axis=0,ignore_index=True)
+    insert_dataframe_to_db(df11,'timesheet')
 
 
     return 'True'
